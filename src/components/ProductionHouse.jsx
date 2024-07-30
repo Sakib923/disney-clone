@@ -50,12 +50,12 @@ function ProductionHouse() {
     <div className="flex gap-2 md:gap-5 p-2 md:px-16">
         {productionHouseList.map((item, index) => (
             <div className="border-[2px] border-gray-600 rounded-lg  hover:scale-110
-            transition-all duration-300 ease-in-out cursor-pointer relative shadow-x1 shadow-gray-800">
+            transition-all duration-300 ease-in-out cursor-pointer relative shadow-xl shadow-gray-800">
+                <video className="w-full absolute top-0 rounded-md z-0 opacity-0 hover:opacity-50" 
+                src={item.video} autoPlay loop playsInline muted />
                 <img className="w-full z[1] hover:opacity-100" src={item.image} alt={item.name} />
-                <video className="absolute top-0 rounded-md z-0 opacity-0 hover:opacity-50" 
-                src={item.video} autoPlay loop playsInline muted  controls/>
+                
             </div>
-
         ))}
 
     </div>
