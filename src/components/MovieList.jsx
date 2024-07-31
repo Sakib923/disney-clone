@@ -1,11 +1,16 @@
-import React from 'react'
+import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import GlobalApi from '../Services/GlobalApi';
 import MovieCard from './MovieCard';
+import {HiChevronLeft, HiChevronRight} from 'react-icons/hi2';
+import LargeMovieCard from './LargeMovieCard';
 
-function MovieList({genereId}) {
+function MovieList({genereId, genereIndex}) {
     const [movieList, setMovieList] = useState([]);   
     const elementRef=useRef(null);
+    const screenWidth = window.innerWidth;
+
+
     useEffect(() => {
         getMovieByGener();
     },[]);
@@ -15,59 +20,32 @@ function MovieList({genereId}) {
             setMovieList(resp.data.results);
         })
     }
+    
+    const sliderLeft = (elementRef) => {
+        elementRef.scrollLeft-= screenWidth-110;
+    }
+    
+    const sliderRight = (elementRef) => {
+        elementRef.scrollLeft+= screenWidth-110;
+    }
 
     return (
-        <div className='flex overflow-x-auto gap-8 scrollbar-none pt-5 px-3 pb-5'>
-            {movieList.map((item, index) => (
-                    <MovieCard key={index} movie={item} />
+        <div className="relative">
+            <HiChevronLeft className={`text-white text-[50px] p-2 z-10 absolute mx-8 ${genereIndex%3 === 0 ? "mt-[100px]" : "mt-[150px]"} mt-[150px] 
+                cursor-pointer scroll-smooth hidden md:block`} onClick={() => {sliderLeft(elementRef.current)}}/>
+
+            <HiChevronRight className={`text-white text-[50px] p-2 z-10 absolute mx-8 ${genereIndex%3 === 0 ? "mt-[100px]" : "mt-[150px]"} mt-[150px]
+                right-0 cursor-pointer scroll-smooth hidden md:block `}onClick={() => {sliderRight(elementRef.current)}}/>
+            
+            <div ref={elementRef} className="flex overflow-x-auto gap-8 scroll-smooth scrollbar-none pt-5 px-10 pb-5">
+                {movieList.map((item, index) => (
+                    <>
+                        {genereIndex%3 === 0 ? <LargeMovieCard movie={item}/> : <MovieCard key={index} movie={item} />}
+                    </>
                 ))}
+            </div>
         </div>
     )
-
 }
 
 export default MovieList;
-
-
-// import React, { useEffect, useRef, useState } from 'react'
-// import GlobalApi from '../Services/GlobalApi'
-// import MovieCard from './MovieCard';
-// import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
-// import HrMovieCard from './HrMovieCard';
-// function MovieList({genreId,index_}) {
-//     const [movieList,setMovieList]=useState([])
-//     const elementRef=useRef(null);
-//     useEffect(()=>{
-//         getMovieByGenreId();
-//     },[])
-
-//     const getMovieByGenreId=()=>{
-//         GlobalApi.getMovieByGenreId(genreId).then(resp=>{
-//             // console.log(resp.data.results)
-//             setMovieList(resp.data.results)
-//         })
-//     }
-
-//     const slideRight=(element)=>{
-//         element.scrollLeft+=500;
-//     }
-//     const slideLeft=(element)=>{
-//         element.scrollLeft-=500;
-//     }
-//   return (
-//     <div className='relative'>
-
-//     <div ref={elementRef} className='flex overflow-x-auto gap-8
-//      scrollbar-none scroll-smooth pt-4 px-3 pb-4'>
-//         {movieList.map((item,index)=>(
-//            <>
-//           {index_%3==0?<HrMovieCard movie={item}/>:<MovieCard movie={item} />}
-//            </> 
-//         ))}
-//     </div>
-//     
-//     </div>
-//   )
-// }
-
-// export default MovieList
